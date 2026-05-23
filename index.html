@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeraByte Computer Academy - Student Management System</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <img src="logo.png" alt="TeraByte Logo" class="sidebar-logo">
+        <div class="sidebar-brand">
+            <h2>TeraByte</h2>
+            <span>Computer Academy</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+            <i class="fas fa-th-large"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-section="admission">
+            <i class="fas fa-user-plus"></i>
+            <span>New Admission</span>
+        </a>
+        <a href="#" class="nav-item" data-section="students">
+            <i class="fas fa-users"></i>
+            <span>All Students</span>
+        </a>
+        <a href="#" class="nav-item" data-section="certificates">
+            <i class="fas fa-certificate"></i>
+            <span>Certificates</span>
+        </a>
+        <a href="#" class="nav-item" data-section="fees">
+            <i class="fas fa-rupee-sign"></i>
+            <span>Fees Management</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <p>Learn Today, Lead Tomorrow</p>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-left">
+            <h1 id="pageTitle">Dashboard</h1>
+            <p class="breadcrumb">Welcome back, Administrator</p>
+        </div>
+        <div class="header-right">
+            <div class="header-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Global search...">
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                <button class="icon-btn"><i class="fas fa-envelope"></i></button>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=0b4ec7&color=fff" alt="Admin">
+                    <div>
+                        <span class="user-name">Administrator</span>
+                        <span class="user-role">Super Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="content-section active" id="dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-blue"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <h3 id="totalStudents">0</h3>
+                    <p>Total Students</p>
+                </div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 12%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green"><i class="fas fa-rupee-sign"></i></div>
+                <div class="stat-info">
+                    <h3 id="totalFees">₹0</h3>
+                    <p>Total Fees Collected</p>
+                </div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 8%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-orange"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="stat-info">
+                    <h3 id="totalDue">₹0</h3>
+                    <p>Total Due Amount</p>
+                </div>
+                <div class="stat-trend down"><i class="fas fa-arrow-down"></i> 5%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-purple"><i class="fas fa-certificate"></i></div>
+                <div class="stat-info">
+                    <h3 id="certPending">0</h3>
+                    <p>Certificates Pending</p>
+                </div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 3%</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card recent-students">
+                <div class="card-header">
+                    <h3><i class="fas fa-clock"></i> Recent Admissions</h3>
+                    <button class="btn-text" onclick="showSection('students')">View All</button>
+                </div>
+                <div class="card-body">
+                    <table class="data-table compact">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentStudentsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fee-overview">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-pie"></i> Fee Overview</h3>
+                </div>
+                <div class="card-body fee-stats">
+                    <div class="fee-ring">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="ring-bg" cx="50" cy="50" r="40"/>
+                            <circle class="ring-progress" id="feeRing" cx="50" cy="50" r="40"/>
+                        </svg>
+                        <div class="ring-text">
+                            <span id="feePercent">0%</span>
+                            <small>Collected</small>
+                        </div>
+                    </div>
+                    <div class="fee-legend">
+                        <div class="legend-item">
+                            <span class="dot bg-green"></span>
+                            <span>Paid: <strong id="legendPaid">₹0</strong></span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="dot bg-orange"></span>
+                            <span>Due: <strong id="legendDue">₹0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admission Form Section -->
+    <section class="content-section" id="admission">
+        <div class="form-card">
+            <div class="form-header">
+                <div class="form-header-icon"><i class="fas fa-user-plus"></i></div>
+                <div>
+                    <h2>Student Admission</h2>
+                    <p>Fill in the details to register a new student</p>
+                </div>
+            </div>
+
+            <form id="studentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> Admission No. <span class="required">*</span></label>
+                        <input type="text" id="adno" placeholder="e.g., TB2024001" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Student Name <span class="required">*</span></label>
+                        <input type="text" id="studentName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-male"></i> Father's Name <span class="required">*</span></label>
+                        <input type="text" id="fatherName" placeholder="Father's Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Contact No. <span class="required">*</span></label>
+                        <input type="tel" id="contact" placeholder="10-digit Mobile Number" required maxlength="10">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email ID</label>
+                        <input type="email" id="email" placeholder="student@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-graduation-cap"></i> Class</label>
+                        <input type="text" id="class" placeholder="e.g., 12th, B.Tech">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-laptop-code"></i> Course</label>
+                        <select id="course">
+                            <option value="">Select Course</option>
+                            <option value="DCA">DCA - Diploma in Computer Applications</option>
+                            <option value="ADCA">ADCA - Advanced Diploma in Computer Applications</option>
+                            <option value="Tally">Tally with GST</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Python">Python Programming</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Batch Time</label>
+                        <select id="batch">
+                            <option value="">Select Batch</option>
+                            <option value="8:00 AM - 10:00 AM">8:00 AM - 10:00 AM</option>
+                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                            <option value="12:00 PM - 2:00 PM">12:00 PM - 2:00 PM</option>
+                            <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+                            <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+                            <option value="6:00 PM - 8:00 PM">6:00 PM - 8:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-rupee-sign"></i> Total Fees (₹)</label>
+                        <input type="number" id="fees" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-check-circle"></i> Fees Paid (₹)</label>
+                        <input type="number" id="paid" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-exclamation-circle"></i> Due Amount (₹)</label>
+                        <input type="number" id="due" placeholder="Auto-calculated" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-certificate"></i> Certificate Status</label>
+                        <select id="certificate">
+                            <option value="Pending">Certificate Pending</option>
+                            <option value="Issued">Certificate Issued</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group photo-upload">
+                    <label><i class="fas fa-camera"></i> Student Photo</label>
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="photo" accept="image/*" hidden>
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop or click to upload photo</p>
+                            <small>JPG, PNG up to 2MB</small>
+                        </div>
+                        <img id="photoPreview" class="photo-preview" style="display:none;">
+                        <button type="button" class="btn-remove-photo" id="removePhoto" style="display:none;"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="btn-secondary"><i class="fas fa-undo"></i> Reset</button>
+                    <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Add Student</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Students List Section -->
+    <section class="content-section" id="students">
+        <div class="card">
+            <div class="card-header">
+                <div class="header-left-group">
+                    <h3><i class="fas fa-users"></i> Student Records</h3>
+                    <span class="badge-count" id="studentCount">0 students</span>
+                </div>
+                <div class="header-actions-group">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchBox" placeholder="Search by name, admission no, course..." onkeyup="searchStudent()">
+                    </div>
+                    <button class="btn-export" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="data-table" id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Ad. No</th>
+                            <th>Student Name</th>
+                            <th>Father's Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Class</th>
+                            <th>Course</th>
+                            <th>Batch</th>
+                            <th>Total Fees</th>
+                            <th>Paid</th>
+                            <th>Due</th>
+                            <th>Certificate</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="card-footer" id="tableFooter">
+                <span>Showing <strong id="showingCount">0</strong> of <strong id="totalCount">0</strong> students</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section class="content-section" id="certificates">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-certificate"></i> Certificate Management</h3>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="data-table" id="certificateTable">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Ad. No</th>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fees Section -->
+    <section class="content-section" id="fees">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-rupee-sign"></i> Fees Management</h3>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="data-table" id="feesTable">
+                    <thead>
+                        <tr>
+                            <th>Ad. No</th>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>Total Fees</th>
+                            <th>Paid</th>
+                            <th>Due</th>
+                            <th>Progress</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Operation successful</span>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-edit"></i> Edit Student</h3>
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <form id="editForm">
+                <input type="hidden" id="editIndex">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Admission No.</label>
+                        <input type="text" id="editAdno" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="editStudentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name</label>
+                        <input type="text" id="editFatherName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact</label>
+                        <input type="tel" id="editContact" required maxlength="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="editEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <input type="text" id="editClass">
+                    </div>
+                    <div class="form-group">
+                        <label>Course</label>
+                        <select id="editCourse">
+                            <option value="DCA">DCA</option>
+                            <option value="ADCA">ADCA</option>
+                            <option value="Tally">Tally with GST</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Python">Python</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Batch</label>
+                        <select id="editBatch">
+                            <option value="8:00 AM - 10:00 AM">8:00 AM - 10:00 AM</option>
+                            <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                            <option value="12:00 PM - 2:00 PM">12:00 PM - 2:00 PM</option>
+                            <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+                            <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+                            <option value="6:00 PM - 8:00 PM">6:00 PM - 8:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Fees</label>
+                        <input type="number" id="editFees" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Fees Paid</label>
+                        <input type="number" id="editPaid" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Due Amount</label>
+                        <input type="number" id="editDue" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Certificate</label>
+                        <select id="editCertificate">
+                            <option value="Pending">Pending</option>
+                            <option value="Issued">Issued</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
